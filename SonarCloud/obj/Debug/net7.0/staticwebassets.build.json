@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "0BtU/FOxCGhPQ2Y8/Z8QfvvTBvDTtIyGXOhDANlZ0YE=",
+  "Source": "SonarCloud",
+  "BasePath": "_content/SonarCloud",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

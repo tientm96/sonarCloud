@@ -1,0 +1,67 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+- develop
+
+stages:
+- stage: 'Build'
+  displayName: 'Build'
+  jobs:
+  - job: 'Build'
+    displayName: 'Build'
+    variables:
+      solution: '**/*.sln'
+      buildPlatform: 'Any CPU'
+      buildConfiguration: 'Release'
+
+    pool:
+      name: Dev-server
+      demands:
+      - msbuild
+      - visualstudio
+      - vstest
+      - npm
+
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Install .NET'
+      inputs:
+        packageType: 'sdk'
+        version: '5.0.x'
+        performMultiLevelLookup: true
+
+    - task: CmdLine@2
+      displayName: 'Install dotnet ef'
+      inputs:
+        script: 'dotnet tool update --global dotnet-ef --version 5.0.2'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore .NET'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+        feedsToUse: 'select'
+
+    - task: CmdLine@2
+      displayName: 'EF Migrations Script'
+      inputs:
+        script: 'dotnet ef migrations script --project Billing365.Infra.Persistence\Billing365.Infra.Persistence.csproj --startup-project Billing365.Infra.Persistence\Billing365.Infra.Persistence.csproj -i -o $(build.artifactstagingdirectory)\API_DbMigrations.sql'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build and Publish'
+      inputs:
+        command: publish
+        publishWebProjects: true
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: true
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+        # PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        TargetPath: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'billing365'
+        publishLocation: 'Container'
