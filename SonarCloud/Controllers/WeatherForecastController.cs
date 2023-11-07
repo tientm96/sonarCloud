@@ -33,7 +33,7 @@ namespace SonarCloud.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get2()
         {
-            NullReferenceExample();
+            var aa = NullReferenceExample();
 
             NoUsingExample();
 
@@ -49,10 +49,10 @@ namespace SonarCloud.Controllers
             .ToArray();
         }
 
-        private static int NullReferenceExample()
+        private static int? NullReferenceExample()
         {
             int? number = null;
-            return number.Value;
+            return number;
         }
 
         private static void NoUsingExample()
