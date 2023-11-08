@@ -57,7 +57,7 @@ namespace SonarCloud.Controllers
 
         private static void NoUsingExample()
         {
-            FileStream fileStream = new FileStream("example.txt", FileMode.Open);
+            _ = new FileStream("example.txt", FileMode.Open);
         }
 
         public static void InfiniteLoopExample()
