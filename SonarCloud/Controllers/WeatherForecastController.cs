@@ -6,6 +6,7 @@ namespace SonarCloud.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private const string URI = "scheme://user:Admin123@domain.com";
         private static readonly string[] Summaries = new[]
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -33,7 +34,7 @@ namespace SonarCloud.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get2()
         {
-            NullReferenceExample();
+            var n = NullReferenceExample();
 
             NoUsingExample();
 
@@ -49,15 +50,15 @@ namespace SonarCloud.Controllers
             .ToArray();
         }
 
-        private static int NullReferenceExample()
+        private static int? NullReferenceExample()
         {
             int? number = null;
-            return number.Value;
+            return number;
         }
 
         private static void NoUsingExample()
         {
-            FileStream fileStream = new FileStream("example.txt", FileMode.Open);
+            _ = new FileStream("example.txt", FileMode.Open);
         }
 
         public static void InfiniteLoopExample()
@@ -85,7 +86,7 @@ namespace SonarCloud.Controllers
 
         public static string OtherCases()
         {
-            string url = "scheme://user:Admin123@domain.com";
+            string url = URI;
 
             return url;
         }
